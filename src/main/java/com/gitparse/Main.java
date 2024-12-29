@@ -1,8 +1,8 @@
-package org.example;
+package com.gitparse;
 
+import com.gitparse.scrape.GitService;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinMustache;
-import org.example.scrape.GitService;
 
 import static io.javalin.rendering.template.TemplateUtil.model;
 

@@ -1,4 +1,4 @@
-package org.example.scrape;
+package com.gitparse.scrape;
 
 import java.io.File;
 
