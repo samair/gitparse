@@ -12,7 +12,7 @@ repositories {
 }
 
 application {
-    mainClass = 'org.example.Main'
+    mainClass = 'com.gitparser.Main'
 }
 
 dependencies {

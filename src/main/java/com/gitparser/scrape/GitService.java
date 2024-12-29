@@ -1,4 +1,4 @@
-package com.gitparse.scrape;
+package com.gitparser.scrape;
 
 import org.eclipse.jgit.api.Git;
 

@@ -1,6 +1,6 @@
-package com.gitparse;
+package com.gitparser;
 
-import com.gitparse.scrape.GitService;
+import com.gitparser.scrape.GitService;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinMustache;
 
@@ -18,7 +18,7 @@ public class Main {
 
                 } )
                 .get("/", context ->
-                        context.render("templates/template.html", model("name", "John")))
+                        context.render("templates/index.html", model("name", "John")))
                 .get("/ping", context -> context.result("Pong!!"))
                 .get("/clone/<repo>", ctx ->
                 {

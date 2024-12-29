@@ -186,58 +186,11 @@ main {
   <h1>GitParse</h1>
 </header>
 <main>
-<!--  <div class="search-container">-->
-<!--    <span class="icon">🔍</span>-->
-<!--    <input type="text" placeholder="gitparse.com">-->
-<!--    <span class="clear">✖</span>-->
-<!--  </div>-->
-<div class="comment-section">
+  <div class="search-container">
+    <input type="text" placeholder="gitparse.com">
 
-  <div class="comment">
-    <div class="comment-body">
-      <div class="comment-header">
-        <strong class="username">{{name}}</strong>
-        <span class="timestamp">last commit on {{lastCommit}}</span>
-      </div>
-      <div class="comment-content">
-        <p>File Structure</p>
-        <div class="code-section">
-          <button class="copy-btn" onclick="copyToClipboard()">Copy</button>
-          <pre><code id="code-snippet">{{fileStructure}}</code></pre>
-
-        </div>
-      </div>
-      <div class="comment-actions">
-        <button>Reply</button>
-        <button>Edit</button>
-        <button>Delete</button>
-      </div>
-    </div>
   </div>
-  <div class="comment">
-    <div class="comment-body">
-      <div class="comment-content">
-        <p>File Content</p>
-        <div class="code-section">
-          <pre><code class="code-snippet">{{testCode}}</code></pre>
-          <button class="copy-btn" onclick="copyToClipboard()">Copy</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
 </main>
-<script>
-  function copyToClipboard() {
-    const codeSnippet = document.getElementById('code-snippet').textContent;
-    navigator.clipboard.writeText(codeSnippet).then(() => {
-      alert('Code copied to clipboard!');
-    }).catch(err => {
-      console.error('Failed to copy text: ', err);
-    });
-  }
-</script>
 
 </body>
 </html>
