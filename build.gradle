@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.graalvm.buildtools.native' version '0.10.4'
+    id 'com.gradleup.shadow' version '9.0.0-beta4'
+}
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'org.example.Main'
+}
+
+dependencies {
+    implementation("io.javalin:javalin:6.4.0")
+    implementation("io.javalin:javalin-rendering:6.4.0")
+// template engine dependency
+// https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit
+    implementation group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '7.1.0.202411261347-r'
+// https://mvnrepository.com/artifact/io.pebbletemplates/pebble
+    implementation group: 'com.github.spullara.mustache.java', name: 'compiler', version: '0.9.10'
+
+    implementation("org.slf4j:slf4j-simple:2.0.11")
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+graalvmNative {
+    binaries.all {
+        resources.autodetect()
+    }
+}
