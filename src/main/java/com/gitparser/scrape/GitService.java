@@ -86,11 +86,11 @@ public class GitService {
         sb.append("\n");
 
         try {
-            var header = """
-                =====================================================================
-                           File Name - %s
-                =====================================================================
-                """;
+            var header =
+                "=====================================================================\n"+
+                "           File Name - %s                                            \n"+
+                "=====================================================================";
+
             var content = Files.readString(file.toPath());
             var fileRelative = file.getCanonicalPath().replace(baseFolder,"");
             header = String.format(header, fileRelative);
