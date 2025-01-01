@@ -1,5 +1,6 @@
-package com.gitparser.scrape;
+package com.gitparse.parse;
 
+import com.gitparse.model.ParseResponse;
 import org.eclipse.jgit.api.Git;
 
 import java.io.File;
@@ -7,20 +8,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class GitService {
 
-    static StringBuilder folderName = new StringBuilder();
-    static StringBuilder fileAsText = new StringBuilder();
-    public List<String> clone(String url) {
-        List<String> response = new ArrayList<>();
+    private static final StringBuilder fileAsText = new StringBuilder();
+    public ParseResponse clone(String url) {
+        ParseResponse response = new ParseResponse();
         try {
             var parts = url.split("/");
             var folder = Path.of("").toAbsolutePath() +"/"+parts[parts.length -1];
-            var git = Git.cloneRepository()
+
+            //Perform a shallow clone
+            var git = Git.cloneRepository().setDepth(1)
                     .setURI(url)
                     .setDirectory(new File(folder))
                     .call();
@@ -29,12 +29,12 @@ public class GitService {
                     call().
                     iterator().
                     next();
-            response.add(readRepoStructure(folder));
-            response.add(fileAsText.toString());
+            response.setRepoStructure(readRepoStructure(folder));
+            response.setFileContents(fileAsText.toString());
             System.out.println(lastCommit.getCommitTime());
             Timestamp ts = new Timestamp(lastCommit.getCommitTime()* 1000L);
             Date date = new Date(ts.getTime());
-            response.add(date.toString());
+            response.setLastCommitTime(date.toString());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -42,7 +42,7 @@ public class GitService {
 
     }
 
-    private String readRepoStructure(String folder) {
+    String readRepoStructure(String folder) {
         File file = new File(folder);
         String structure = printDirectoryTree(file,folder);
         deleteDirectory(file);
@@ -65,7 +65,7 @@ public class GitService {
             throw new IllegalArgumentException("folder is not a Directory");
         }
         sb.append(getIndentString(indent));
-        sb.append("+--");
+        sb.append("|--");
         sb.append(folder.getName());
         sb.append("/");
         sb.append("\n");
@@ -81,15 +81,18 @@ public class GitService {
 
     private static void printFile(File file, int indent, StringBuilder sb, String baseFolder) {
         sb.append(getIndentString(indent));
-        sb.append("+--");
+        sb.append("|--");
         sb.append(file.getName());
         sb.append("\n");
 
         try {
-            var header =
-                "=====================================================================\n"+
-                "           File Name - %s                                            \n"+
-                "=====================================================================";
+            var header = """
+                 
+                 ---------------------------------------------------------------------
+                           File Name - %s
+                 ---------------------------------------------------------------------
+                 
+                 """;
 
             var content = Files.readString(file.toPath());
             var fileRelative = file.getCanonicalPath().replace(baseFolder,"");
@@ -110,7 +113,7 @@ public class GitService {
         return sb.toString();
     }
 
-    private void deleteDirectory(File directoryToBeDeleted) {
+    void deleteDirectory(File directoryToBeDeleted) {
         File[] allContents = directoryToBeDeleted.listFiles();
         if (allContents != null) {
             for (File file : allContents) {
