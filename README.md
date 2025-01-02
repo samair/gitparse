@@ -5,6 +5,11 @@
 
 Convert any git repo to Prompt friendly text.
 
+### API
+API is work in progress
+```
+curl https://gitparse.com/api/v1/parse/https://github.com/samair/gitparse
+```
 ### Stack
 - [Javalin](https://javalin.io/)
 - [Mustache Java](https://github.com/spullara/mustache.java)
