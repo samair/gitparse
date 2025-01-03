@@ -12,7 +12,7 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GitHub display with Code Section</title>
+  <title>gitparse</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 
@@ -27,15 +27,31 @@
   </div>
 </div>
 
+<div class="typewriter">
+  <h1>Make your git repository prompt friendly</h1>
+  <p>Get repository structure, file content of your git repository in a prompt friendly fashion.</p>
+  <p class="username">Use the API </p>
 
+ <div class="copy-code">
+  <pre><code id="copy_api_code">curl https://gitparse.com/api/v1/parse/https://github.com/samair/gitparse</code></pre>
+   <button  onclick="copyToClipboard(this, 'copy_api_code')">📋</button>
+ </div>
+  <p>or</p>
+ </div>
   <div class="search-bar">
     <input
-            type="text"
-            id="search-input"
+            type="url"
+            name="parse_input"
+            id="parse_input"
+            pattern="https://.*.com"
             placeholder="https://github.com/samair/gitparse"
     />
     <button  onclick="parseGitRepo()">Parse</button>
+
   </div>
+<div id="loading-overlay" class="loading-overlay" style="display: none;">
+  <div class="loading-animation"></div>
+</div>
 <main id="main-content">
   <div class="overall-actions">
     <button class="copy-btn" onclick="downloadAsText(this)">Download</button>
@@ -52,7 +68,7 @@
       <div class="display-content">
         <p>File Structure</p>
         <div class="code-section">
-          <button class="copy-btn" onclick="copyToClipboard(this, 'repo-structure')">Copy</button>
+          <button class="copy-btn"  onclick="copyToClipboard(this, 'repo-structure')">📋</button>
           <pre><code id="repo-structure">{{fileStructure}}</code></pre>
 
         </div>
@@ -64,7 +80,7 @@
       <div class="display-content">
         <p>File Content</p>
         <div class="code-section">
-          <button class="copy-btn" onclick="copyToClipboard(this, 'repo-content')">Copy</button>
+          <button  class="copy-btn" onclick="copyToClipboard(this, 'repo-content')">📋</button>
           <pre><code id="repo-content">{{repoContent}}</code></pre>
         </div>
       </div>
@@ -72,7 +88,10 @@
     </div>
   </div>
 </div>
+  <!-- The actual snackbar -->
+
 </main>
+<div id="snackbar">Some text some message..</div>
 <script src="/js/script.js"></script>
 </body>
 </html>
