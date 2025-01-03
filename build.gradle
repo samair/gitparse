@@ -1,22 +1,23 @@
 plugins {
     id 'java'
+    id 'jacoco'
     id 'application'
     id 'org.graalvm.buildtools.native' version '0.10.4'
     id 'com.gradleup.shadow' version '9.0.0-beta4'
 }
 group = 'com.gitparse'
-version = '0.1'
+version = '0.3'
 
 repositories {
     mavenCentral()
 }
 
 application {
-    mainClass = 'com.gitparser.Main'
+    mainClass = 'com.gitparse.Main'
 }
 
 dependencies {
-    implementation("io.javalin:javalin:6.4.0")
+    implementation("io.javalin:javalin-bundle:6.4.0")
     implementation("io.javalin:javalin-rendering:6.4.0")
 // template engine dependency
 // https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit
@@ -48,3 +49,22 @@ task buildDockerImage(type: Exec) {
     def imageTag = "${project.version}"
     commandLine 'docker', 'buildx','build',  '--platform', 'linux/amd64', '-t', "samair/gitparse:${imageTag}", '.'
 }
+
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.9
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification

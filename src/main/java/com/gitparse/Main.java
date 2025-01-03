@@ -13,10 +13,13 @@ import static io.javalin.rendering.template.TemplateUtil.model;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static Javalin createApp() {
+        return createApp(new GitService());
+    }
 
+    public static Javalin createApp(GitService gitService) {
 
-        Javalin.create(javalinConfig -> {
+        return Javalin.create(javalinConfig -> {
                     javalinConfig.fileRenderer(new JavalinMustache());
                     javalinConfig.staticFiles.add("/public", Location.CLASSPATH);
                 })
@@ -26,7 +29,6 @@ public class Main {
                     {
                         NaiveRateLimit.requestPerTimeUnit(ctx,5, TimeUnit.MINUTES);
                         var repoName = ctx.pathParam("repo");
-                        GitService gitService = new GitService();
                         var resp = gitService.clone(ctx.pathParam("repo"));
                         ctx.render("templates/template.html",
                                 model("name", repoName, "lastCommit", resp.getLastCommitTime(),
@@ -35,10 +37,13 @@ public class Main {
                 )
                 .get("/api/v1/parse/<repo>", context -> {
                     NaiveRateLimit.requestPerTimeUnit(context,5, TimeUnit.MINUTES);
-                    GitService gitService = new GitService();
                     var repoName = context.pathParam("repo");
                     context.json(context.jsonMapper().toJsonString(gitService.clone(repoName), ParseResponse.class));
-                })
-                .start(7878);
+                });
+
+    }
+
+    public static void main(String[] args) {
+        createApp().start(7878);
     }
 }
